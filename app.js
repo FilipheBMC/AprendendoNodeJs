@@ -13,11 +13,11 @@ const express = require("express");
 const app = express();
 
 app.get("/", function(req, rest){
-    rest.send("Seja bem vindo ao meu primeiro servidor rodando em node!");
+    rest.sendFile(__dirname + "/html/index.html");
 });
 
 app.get("/sobre", function(req, res){
-    res.send("minha página sobre");
+    res.sendFile(__dirname + "/html/sobre.html");
 });
 
 app.get("/blog", function(req, res){
@@ -28,7 +28,7 @@ app.get("/blog", function(req, res){
 
 app.get('/ola/:cargo/:nome', function(req, res){
     // res.send(req.params);
-    res.send("Ola " + req.params.nome + "\n O seu cargo é: " + req.params.cargo);
+    res.send("<h1>Ola " + req.params.nome +"</h1>" + "\n O seu cargo é: " + req.params.cargo);
 });
 
 
