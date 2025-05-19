@@ -1,37 +1,29 @@
-// var http = require('http');
-
-// http.createServer(function(req, res){
-//     res.end("Ola")
-// }).listen(8081);
-
-// console.log("O servidor está rodando");
-
 // Carregando o módulo do express
 const express = require("express");
 
 //Variavel que vai receber a função express que vem do módulo express
 const app = express();
 
-app.get("/", function(req, rest){
-    rest.sendFile(__dirname + "/html/index.html");
-});
+const { engine } = require("express-handlebars");
+const Sequelize = require('sequelize');
 
-app.get("/sobre", function(req, res){
-    res.sendFile(__dirname + "/html/sobre.html");
-});
+// Config
 
-app.get("/blog", function(req, res){
-    res.send("Bem vindo ao meu blog");
-});
+    //  Template Engine
+        app.engine('handlebars', engine({ defaultLayout: 'main' }));
+        app.set('view engine', 'handlebars');
 
-// Parâmetros
+    //  Conexão com o banco de dados MySql
+        const sequelize = new Sequelize('test', 'root', '0000', {
+        host: 'localhost',
+        dialect: 'mysql'
+        });
 
-app.get('/ola/:cargo/:nome', function(req, res){
-    // res.send(req.params);
-    res.send("<h1>Ola " + req.params.nome +"</h1>" + "\n O seu cargo é: " + req.params.cargo);
-});
+// Rotas
 
-
+        app.get('/cad', function(req, res){
+            res.render('formulario');
+        });
 
 //Abrindo servidor com express
 app.listen(8081, function(){
