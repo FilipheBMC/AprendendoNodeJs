@@ -14,31 +14,45 @@ const Post = require('./models/Post');
 
 // Config
 
-    //  Template Engine
-        app.engine('handlebars', engine({ defaultLayout: 'main' }));
-        app.set('view engine', 'handlebars');
-    // Configurando body parser
-        app.use(bodyParser.urlencoded({extended: false}));
-        app.use(bodyParser.json());
+//  Template Engine
+app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+// Configurando body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Rotas
 
-        app.get('/cad', function(req, res){
-            res.render('formulario');
-        });
+app.get('/', function (req, res) {
+    Post.findAll({ order: [['id', 'DESC']] }).then(function (posts) {
+        console.log(posts)
+        const postsPlain = posts.map(post => post.get({ plain: true }));
+        res.render('home', { posts: postsPlain });
+    }).catch(function (erro) {
+        res.send("Erro ao carregar postagens: " + erro);
+    });
+});
 
-        app.post('/add', function(req, res){
-            Post.create({
-                titulo: req.body.titulo,
-                conteudo: req.body.conteudo
-            }).then(function(){
-                res.send("Post criado com sucesso!")
-            }).catch(function(erro){
-                res.send("houve um erro: " + erro)
-            })
-        });
+
+
+
+
+app.get('/cad', function (req, res) {
+    res.render('formulario');
+});
+
+app.post('/add', function (req, res) {
+    Post.create({
+        titulo: req.body.titulo,
+        conteudo: req.body.conteudo
+    }).then(function () {
+        res.redirect("/")
+    }).catch(function (erro) {
+        res.send("houve um erro: " + erro)
+    })
+});
 
 //Abrindo servidor com express
-app.listen(8081, function(){
+app.listen(8081, function () {
     console.log("Servidor rodando na porta 8081");
 });
