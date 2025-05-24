@@ -67,6 +67,41 @@ router.post('/categorias/nova', (req, res) => {
 
 })
 
+router.get("/categorias/edit/:id", (req, res) => {
+    Categoria.findOne({_id:req.params.id}).lean().then((categoria) => {
+    if (!categoria){
+        req.flash("erro_msg", "Esta categoria não existe")
+        return res.redirect("/admin/categoria")
+    }
+        res.render("admin/editcategorias", {categoria: categoria})
+    }).catch((err) => {
+        req.flash("erro_msg", "Houve um erro ao editar a categoria.")
+        res.redirect("/admin/categoria")
+    })
+    
+})
+
+router.post("/categorias/edit", (req, res) => {
+    Categoria.findOne({_id: req.body.id}).then((categoria) => {
+
+        categoria.nome = req.body.nome
+        categoria.slug = req.body.slug
+
+        categoria.save().then(() => {
+            req.flash("success_msg", "Categoria editada com sucesso!")
+            res.redirect("/admin/categoria")
+        }).catch((err) => {
+            req.flash("erro_msg", "Houve um erro ao salvar a requisição da categoria")
+            res.redirect("/admin/categoria")
+        })
+
+    }).catch((err) => {
+        req.flash("erro_msg", "Houve um erro ao editar a categoria.")
+        res.redirect("/admin/categoria")
+    })
+})
+
+
 
 
 module.exports = router
