@@ -6,8 +6,24 @@
     const app = express()
     const path = require("path")
     const admin = require("./routes/admin")
+    const session = require("express-session")
+    const flash = require("connect-flash")
 
 // Configurações
+    // sessão
+        app.use(session({
+            secret: "cursoNode",
+            resave: true,
+            saveUninitialized: true
+        }))
+        app.use(flash())
+
+    // Middleware
+        app.use((req, res, next) => {
+            res.locals.success_msg = req.flash("success_msg")
+            res.locals.erro_msg = req.flash("erro_msg")
+            next()
+        })
     // Body Parser
         app.use(bodyparser.urlencoded({extended: true}))
         app.use(bodyparser.json())
