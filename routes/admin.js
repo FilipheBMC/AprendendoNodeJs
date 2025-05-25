@@ -209,4 +209,13 @@ router.post("/postagem/edit", (req, res) => {
     })
 })
 
+router.get("/postagens/deletar/:id", (req, res) => {
+    Postagem.deleteOne({_id: req.params.id}).then(() => {
+        res.flash("success_msg", "Postagem deletada com sucesso!")
+        res.redirect("/admin/postagens")
+    }).catch((err) => {
+        res.flash("erro_msg", "Houve um erro interno ao excluir.")
+        res.redirect("/admin/postagens")
+    })
+})
 module.exports = router
