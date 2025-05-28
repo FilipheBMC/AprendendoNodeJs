@@ -54,6 +54,21 @@
                     res.redirect("/404")
                 })
     })
+
+    app.get("/postagem/:slug", (req, res) => {
+        Postagens.findOne({slug: req.params.slug}).lean().then((postagem) => {
+            if(postagem){
+                res.render("postagem/index", {postagem: postagem})
+            }else{
+                req.flash("erro_msg", "Esta postagem não existe.")
+                res.redirect("/")
+            }
+        }).catch((err) => {
+            req.flash("erro_msg", "Houve um erro interno.")
+            res.redirect("/")
+        })
+    })
+
     app.use('/admin', admin)
 
     app.get("/404", (req, res) => {
