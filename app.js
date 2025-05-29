@@ -12,6 +12,7 @@ require('./models/Postagem')
 const Postagens = mongoose.model("postagens")
 require("./models/categoria")
 const Categoria = mongoose.model("categorias")
+const usuarios = require("./routes/usuario")
 
 // Configurações
 // sessão
@@ -102,6 +103,7 @@ app.get("/categorias/:slug", (req, res) => {
 })
 
 app.use('/admin', admin)
+app.use("/usuarios", usuarios)
 
 app.get("/404", (req, res) => {
     req.flash()
