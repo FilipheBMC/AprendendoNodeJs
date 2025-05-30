@@ -9,6 +9,14 @@ const Categoria = mongoose.model("categorias")
 //Pegando a chasse Postagem e colocando em uma const
 require('../models/Postagem')
 const Postagem = mongoose.model("postagens")
+//Com isso aqui eu posso protejer as rotas caso o usuario não for admin
+/*
+Excemplo
+router.get('/', eAdmin, (req, res) => {
+    res.render("admin/index")
+});
+*/
+const { eAdmin } = require("../helpers/eAdmin")
 
 // Definindo rotas
 router.get('/', (req, res) => {
@@ -19,7 +27,7 @@ router.get('/posts', (req, res) => {
     res.send("Página de posts.")
 })
 
-router.get('/categoria', (req, res) => {
+router.get('/categoria',eAdmin, (req, res) => {
     Categoria.find().lean().sort({date: "asc"}).then((categorias) => {
         res.render("admin/categorias", {categorias: categorias})
     }).catch((err) => {
