@@ -35,6 +35,7 @@ app.use(flash())
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg")
     res.locals.erro_msg = req.flash("erro_msg")
+    res.locals.error = req.flash("error")
     next()
 })
 // Body Parser
