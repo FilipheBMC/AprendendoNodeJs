@@ -13,6 +13,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/categorias">Categorias</a>
         </li>
+
         {{#if user}}
         <li class="nav-item">
           <a class="nav-link" href="/usuarios/logout">Sair</a>
@@ -25,6 +26,11 @@
           <a class="nav-link" href="/usuarios/registro">Registro</a>
         </li>
         {{/if}}
+        <select class="form-select bg-dark text-white" onchange="if (this.value) window.location.href=this.value;">
+          <option selected disabled>Configurações Admin</option>
+          <option value="/admin/categoria">Categorias</option>
+          <option value="/admin/postagens">Postagens</option>
+        </select>
       </ul>
     </div>
   </div>
