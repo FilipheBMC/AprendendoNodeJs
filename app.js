@@ -13,6 +13,10 @@ const Postagens = mongoose.model("postagens")
 require("./models/categoria")
 const Categoria = mongoose.model("categorias")
 const usuarios = require("./routes/usuario")
+const passport = require("passport")
+require("./config/auth")(passport)
+
+
 
 // Configurações
 // sessão
@@ -21,6 +25,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(flash())
 
 // Middleware
@@ -82,11 +90,11 @@ app.get("/categorias", (req, res) => {
 })
 
 app.get("/categorias/:slug", (req, res) => {
-    Categoria.findOne({slug: req.params.slug}).lean().then((categoria) => {
+    Categoria.findOne({ slug: req.params.slug }).lean().then((categoria) => {
         if (categoria) {
 
-            Postagens.find({categoria: categoria._id}).lean().then((postagens) => {
-                res.render("categorias/postagens", {postagens : postagens , categoria : categoria})
+            Postagens.find({ categoria: categoria._id }).lean().then((postagens) => {
+                res.render("categorias/postagens", { postagens: postagens, categoria: categoria })
             }).catch((err) => {
                 req.flash("erro_msg", "Houve um erro ao carregar o post.")
                 res.redirect("/")
